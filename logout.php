@@ -9,5 +9,7 @@ if(isset($_COOKIE['token'])) {
     $data = execute($sql);
 }
 setcookie('token', '', time() - 10, '/');
-header('Location: index.php');
+if (isset($_SERVER["HTTP_REFERER"])) {
+    header("Location: " . $_SERVER["HTTP_REFERER"]);
+}
 session_destroy();

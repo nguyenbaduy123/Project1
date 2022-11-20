@@ -5,13 +5,17 @@ require_once ("./database/dbhelper.php");
     
 $user = validateToken();
 if($user != null) {
-    header('Location: index.php');
+    if (isset($_SERVER["HTTP_REFERER"])) {
+        header("Location: " . $_SERVER["HTTP_REFERER"]);
+    }
     die();
 }
 
 $email = $password = "";
-    $email = getPost('email');
-    $password = getPost('password');
+
+$email = getPost('email');
+$password = getPost('password');
+
 $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
 $data = executeResult($sql);
     
@@ -23,7 +27,9 @@ if($data != null && count($data) > 0) {
     setcookie('token', $token, time()+24*60*60, '/');
     $sql = "UPDATE users SET token = '$token' WHERE id = ".$data[0]['id'];
     execute($sql);
-    header('Location: index.php');
+    if (isset($_SERVER["HTTP_REFERER"])) {
+        header("Location: " . $_SERVER["HTTP_REFERER"]);
+    }
     die();
 }
 else {

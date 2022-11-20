@@ -25,7 +25,7 @@ if(!empty($_GET)) {
                         <span class="this-product__name"><?=$thisProduct['name'] ?></span>
                         <div class="this-product__price"><?= currency_format($thisProduct['price']) ?></div>
                         <div class="btn add-btn" onclick="addToCart(<?=$productId?>)" style="background-color: green;">Thêm vào giỏ hàng</div>
-                        <div class="btn buy-btn">Mua ngay</div>
+                        <div class="btn buy-btn" onclick= "window.location.href='checkout.php?buy=<?=$productId?>'">Mua ngay</div>
                         <div class="this-product__seller">
                             <span>
                                 Người bán:
@@ -50,17 +50,32 @@ if(!empty($_GET)) {
                     </div>
             </div>
         </div>
-        <?php include_once('layouts/modal.php'); ?>
+        <?php include_once('layouts/modal.php'); 
+        $isLogin = 'false';
+        if(isLogin()) {
+            $isLogin = 'true';
+        }
+        echo "
+        <script>
+        var isLogin = '$isLogin';
+        </script>"?>
     </div>
 
 <script type="text/javascript">
     function addToCart(id) {
-        $.post('api/api-sanpham.php', {
-            'action': 'add',
-            'id': id
-        }, function(data) {
-            location.reload();
-        })
+        if(isLogin == 'false') {
+            alert ("Cần đăng nhập trước!");
+            return;
+        }
+        else {
+            $.post('api/api-sanpham.php', {
+                'action': 'add',
+                'id': id
+            }, function(data) {
+                location.reload();
+            })
+        }
+
     }
 </script>
 

@@ -9,9 +9,16 @@ include_once ('layouts/header.php');
 $productList = [];
 $search = "";
 if(!empty($_GET)) {
-    $search = "%".getGet('search')."%";
-    $sql = "SELECT * FROM products WHERE name LIKE '$search' OR description LIKE '$search'";
-    $productList = executeResult($sql);
+    if(isset($_GET['category'])) {
+        $category_id = getGet('category');
+        $sql = "SELECT * FROM products WHERE category_id = $category_id";
+        $productList = executeResult($sql);
+    }
+    else if(isset($_GET['search'])) {
+        $search = "%".getGet('search')."%";
+        $sql = "SELECT * FROM products WHERE name LIKE '$search' OR description LIKE '$search'";
+        $productList = executeResult($sql);
+    }
 }
 else {
     $sql = "SELECT * FROM products";
@@ -21,6 +28,25 @@ else {
 
 <div class="container">
     <div class="grid product">
+        <div class="catergory">
+            <div class="category-header">
+                Danh Mục
+            </div>
+            <div class="category-list">
+
+<?php
+    $sql = "SELECT * FROM category";
+    $categoryList = executeResult($sql);
+    foreach($categoryList as $categoryItem) {
+        echo '
+                <a href="?category='.$categoryItem['id'].'" class="category-item">
+                    <div class="category-item__img" style = "background-image: url('.$categoryItem['image'].')"></div>
+                    <div class="category-item__name">'.$categoryItem['name'].'</div>
+                </a>';
+    } 
+?>
+            </div>
+        </div>
         <div class="grid__row">
         <?php 
             if(count($productList) == 0) {
@@ -39,9 +65,8 @@ else {
                 </div>
             </div>
             </div>
-    </div>
 
-    <?php include_once('layouts/modal.php'); ?>
+<?php include_once('layouts/modal.php'); ?>
 
 <?php
     include_once ('layouts/footer.php');

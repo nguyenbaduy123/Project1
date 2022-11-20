@@ -1,5 +1,9 @@
 <?php
 session_start();
+require_once ('../utils/utility.php');
+if(!isLogin()) {
+    die();
+}
 $id = "";
 if(!empty($_POST)) {
     require_once ('../utils/utility.php');
@@ -15,6 +19,10 @@ if(!empty($_POST)) {
 }
 
 function addToCart($id) {
+
+    $token = getCookie('token');
+    $sql = "SELECT * FROM users WHERE token = '$token'";
+    $user = executeResult($sql,true);
 
     $cart = [];
     if(isset($_SESSION['cart'])) {
@@ -32,6 +40,9 @@ function addToCart($id) {
     if($isFind == false) {
         $sql = "SELECT * FROM products WHERE id = '$id'";
         $product = executeResult($sql, true);
+        if($product['seller_id'] == $user['id']) {
+            return;
+        }
         $product['num'] = 1;
         $cart[] = $product;
     }

@@ -56,7 +56,7 @@
                     </ul>
                     <ul class="navbar-list">
                         <list class="navbar-item">
-                            <a href="" class="navbar-item-link">
+                            <a href="notification.php" class="navbar-item-link">
                                 <i class="fa-regular fa-bell"></i>
                                 Thông báo
                             </a>
@@ -104,7 +104,7 @@
                     </a>
 
                     <div class="header__search">
-                        <form action="" class="header__search-form">
+                        <form action="index.php" class="header__search-form">
                             <input type="text" class="header__search-input" name="search" 
                             placeholder="Nhập để tìm kiếm">
                             <button type="submit" class="btn btn-search">

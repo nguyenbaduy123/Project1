@@ -8,6 +8,31 @@ if(isLogin() == false) {
     die();
 }
 include_once ('layouts/header.php');
+$cart = [];
+if(!empty($_GET)) {
+    $cart = [];
+    $buy = getGet('buy');
+    $sql = "SELECT * FROM products WHERE id = '$buy'";
+    $product = executeResult($sql, true);
+    if($product == null || count($product) == 0) {
+        echo "<script>
+        window.location.href = 'index.php';
+        alert('Sản phẩm không tồn tại!');
+        </script>";
+        die();
+    }
+    $product['num'] = 1;
+    $cart[] = $product;
+}
+else {
+    if(isset($_SESSION['cart'])) {
+        $cart = $_SESSION['cart'];
+    }
+    if($cart == null || count($cart) == 0) {
+        header('Location: index.php');
+        die();
+    }
+}
 if(!empty($_POST)) {
     $full_name = getPost('full_name');
     $phone_number = getPost('phone_number');
@@ -15,14 +40,6 @@ if(!empty($_POST)) {
     $address = getPost('address');
     $order_date = date('Y-m-d H:i:s');
 
-    $cart = [];
-    if(isset($_SESSION['cart'])) {
-        $cart = $_SESSION['cart'];
-    }
-    if($cart == null || count($cart) == 0) {
-        header('Location: index.php');
-        die(); 
-    }
 
     $sql = "INSERT INTO orders (full_name, phone_number, email, address, order_date)
             values ('$full_name', '$phone_number', '$email', '$address', '$order_date')";
@@ -42,6 +59,10 @@ if(!empty($_POST)) {
         execute($sql);
     }
     unset($_SESSION['cart']);
+    echo "<script>
+    window.location.href = 'index.php';
+    alert('Chúc mừng bạn đã đặt hàng thành công');
+    </script>";
 }
 ?>
 
@@ -60,7 +81,7 @@ if(!empty($_POST)) {
                                 <input required="true" type="text" name="address" class="form-checkout" placeholder="">
                         <div>
                             <button type="submit" class="btn add-btn" style="margin-left: 0; 
-                            background-color: green; width: 300px; margin: 1.5rem 0; ">Hoàn thành</button>
+                            background-color: var(--primary-color); width: 300px; margin: 1.5rem 0; ">Hoàn thành</button>
                         </div>
                     </form>
         </div>
@@ -78,10 +99,12 @@ if(!empty($_POST)) {
                             </thead>
                             <tbody>
 <?php
-$cart = [];
-if(isset($_SESSION['cart'])) {
-    $cart = $_SESSION['cart'];
-}
+// $cart = [];
+// if(empty($_GET)) {
+//     if(isset($_SESSION['cart'])) {
+//         $cart = $_SESSION['cart'];
+//     }
+// }
 $count = 1;
 $total = 0;
 if(count($cart) < 1) {
@@ -115,7 +138,7 @@ else {
             'action': 'delete',
             'id': id
         }, function(data) {
-            location.reload();
+            // location.reload();
         })
     }
 </script>

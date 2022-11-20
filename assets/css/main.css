@@ -173,10 +173,53 @@
 }
 
 .container {
-    min-height: 662px;
+    min-height: 660px;
     background-color: #e6e6e6;
     padding-top: 9rem;
     padding-bottom: 2rem;
+}
+
+.catergory {
+    background-color: #fff;
+    min-height: 200px;
+    margin-bottom: 2rem;
+
+}
+
+.category-header {
+    font-size: 1.5rem;
+    color: #bfbcbc;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    height: 3rem;
+    line-height: 3rem;
+    padding: 0 1.25rem;
+    font-weight: 300;
+}
+
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.category-item {
+    width: 10%;
+    text-decoration: none;
+    color: #000;
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding-bottom: 0.625rem;
+}
+
+.category-item__img {
+    padding-top: 80%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.category-item__name {
+    text-align: center;
+    font-size: 0.875rem;
 }
 
 .product-item {
@@ -271,16 +314,15 @@ text-align: center;
 }
 
 .input-name{
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 .flex-wrapper {
     display: flex;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     flex-direction: column;
     justify-content: space-between;
 }
-
 
 /* sanpham.php */
 .product-detail {

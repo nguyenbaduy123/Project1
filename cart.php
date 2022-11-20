@@ -59,7 +59,7 @@ else {
                         <h2 style="color: red;">Tổng: <?=currency_format($total)?></h2>
                         <?php if(count($cart) > 0) {
                             echo '<a href="checkout.php" style="text-decoration: none">
-                            <div class="btn add-btn" style="background-color: green; margin: auto 0;">Thanh toán</div></a>';
+                            <div class="btn add-btn" style="background-color: green; margin: auto 0;">Đặt hàng</div></a>';
                         } ?>
             </div>
         </div>

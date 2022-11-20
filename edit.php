@@ -3,14 +3,13 @@ session_start();
 $title = "Chỉnh sửa";
 require_once ("./utils/utility.php");
 require_once ("./database/dbhelper.php");
-include_once('layouts/header.php');
-if(isLogin() == false) {
+if(isLogin() == false || empty($_GET)) {
     header("Location: index.php");
     die();
 }
-
+include_once ('layouts/header.php');
 $userId = $_SESSION['user']['id'];
-$id = $_GET['id'];
+$id = getGet('id');
 $sql = "SELECT * FROM products WHERE id = '$id'";
 $product = executeResult($sql, true);
 if($product['seller_id'] != $userId) {
@@ -19,6 +18,7 @@ if($product['seller_id'] != $userId) {
     alert ('Không thể chỉnh sửa sản phẩm của người khác') </script>";
     die();
 }
+
 $productImg = $product['image'];
 
 $explodedOld = explode('/', $productImg);
@@ -55,15 +55,16 @@ if(isset($_FILES['image']) && $_FILES['image']['tmp_name'] != ""){
  $productName = getPost('name');
  $productDes = getPost('description');
  $productPrice = getPost('price');
+ $productPrice = str_ireplace( array(','), '', $productPrice);
+ $productPrice = (int)$productPrice;
 
  if($productName != null && $productPrice != null){
 
     $sql = "UPDATE PRODUCTS SET 
-    name = '$productName', price = '$productPrice', description = '$productDes',
-    image = '$productImg', updated_date = '$date' WHERE id = '$id'";
+        name = '$productName', price = '$productPrice', description = '$productDes',
+        image = '$productImg', updated_date = '$date' WHERE id = '$id'";
     execute($sql);
     header("Location: banhang.php");
-    
  }
 ?>
     <div class="container">
@@ -81,6 +82,22 @@ if(isset($_FILES['image']) && $_FILES['image']['tmp_name'] != ""){
                                 <input required="true" type="text" name="name" placeholder="Không quá 100 ký tự" 
                                 value="<?= $product['name'] ?>" style="width: 100%">
                             </div>
+                            <div class="sell-category">
+                                <h4 class="input-name">Danh mục:</h4>
+                                <select name="category">
+                                      <option value="">---Lựa chọn danh mục---</option>
+                                <?php 
+                                    $sql = "SELECT * FROM category";
+                                    $categoryList = executeResult($sql);
+                                    foreach($categoryList as $categoryItem) {
+                                        echo '
+                                            <option value="'.$categoryItem['id'].'">'.$categoryItem['name'].'</option>
+                                        ';
+                                    }
+                                ?>
+
+                                </select>
+                                </div>
                             <div class="description">
                                 <h4 class="input-name">Mô tả sản phẩm:</h4>
                                 <!-- <input type="text" class="description-text" name="description"> -->
@@ -89,7 +106,7 @@ if(isset($_FILES['image']) && $_FILES['image']['tmp_name'] != ""){
                             <div>
                                 <h4 class="input-name">Giá bán:</h4>
                                 <input required="true" type="text" name="price" id="priceId" data-type="currency"
-                                value="<?= $product['price'] ?>" maxlength="11">
+                                value=<?=currency_format($product['price'], '', ',')?> maxlength="11">
                         </div>
                         <button type="submit" class="btn" style="margin-left: 0;">Cập nhật</button>
                     </form>
