@@ -8,6 +8,8 @@ include_once ('layouts/header.php');
 
 $productList = [];
 $search = "";
+$sql = "SELECT * FROM products";
+$productList = executeResult($sql);
 if(!empty($_GET)) {
     if(isset($_GET['category'])) {
         $category_id = getGet('category');
@@ -20,9 +22,14 @@ if(!empty($_GET)) {
         $productList = executeResult($sql);
     }
 }
-else {
-    $sql = "SELECT * FROM products";
-    $productList = executeResult($sql);
+
+$sort = getGet('sort');
+switch($sort) {
+    case 'price': 
+        usort($productList, function ($item1, $item2) {
+            return $item1['price'] <=> $item2['price'];
+        });
+        break;
 }
 ?>
 
@@ -44,9 +51,15 @@ else {
                     <div class="category-item__name">'.$categoryItem['name'].'</div>
                 </a>';
     } 
-?>
+?> 
             </div>
         </div>
+        <div class="sort">
+            <h4 style="display: inline">Sắp xếp theo:</h4>
+            <a href="?sort=name" class="btn btn-sort">Tên sản phẩm</a>
+            <a href="?sort=price" class="btn btn-sort">Giá bán</a>
+            <a href="?sort=date" class="btn btn-sort">Ngày bán</a>
+        </div> 
         <div class="grid__row">
         <?php 
             if(count($productList) == 0) {

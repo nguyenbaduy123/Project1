@@ -64,7 +64,7 @@
                         <list class="navbar-item">
                             <a href="" class="navbar-item-link">
                                 <i class="fa-regular fa-circle-question"></i>
-                                Hỗ trợ
+                                Hỗ trợ 
                             </a>
                         </list>
                         <list class="navbar-item navbar-item--separate 
@@ -72,7 +72,7 @@
                             <div class="navbar-item-link navbar-item--strong js-signup
                             <?php if(isLogin() == true) echo "hide"?>" onclick="showSignUpForm()">
                                 Đăng ký
-                            </div>
+                            </div> 
                         </list>
                         <list class="navbar-item">
                             <div class="navbar-item-link navbar-item--strong js-login
@@ -80,8 +80,15 @@
                                 Đăng nhập
                             </div>
                         </list>
-                        <list class="user-icon <?php if(isLogin() == true) echo "show"?>">
-                            <i class="fa-solid fa-user"></i>
+                        <list class="user-icon js-user-icon <?php if(isLogin() == true) echo "show"?>">
+                            <i class="fa-solid fa-user" onclick="showUser()"></i>
+                            <div class="user-info js-user-info hide">
+                                <ul class="user-info__list js-user-info">
+                                    <li class="user-info__list-item" onclick="window.location.href='user.php'">Xem thông tin</li>
+                                    <li class="user-info__list-item">Đổi mật khẩu</li>
+                                    <li class="user-info__list-item">Đăng xuất</li>                                   
+                                </ul>
+                            </div>
                         </list>
 
                         <list class="navbar-item">
@@ -115,7 +122,11 @@
                     <div class="header__cart">
                         <a href="cart.php">
                                 <i class="fa-solid fa-cart-shopping">
-                                <p class="num__product"><?=$num?></p>
+                        <?php 
+                            if($num != 0){
+                                echo '<p class="num__product">'.$num.'</p>';
+                            }
+                        ?>
                                 </i>
                         </a>
                     </div>

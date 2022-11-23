@@ -91,3 +91,21 @@ function formatCurrency(input) {
   input[0].setSelectionRange(caret_pos, caret_pos);
 }
 
+function showUser() {
+  const user = document.querySelector('.js-user-info')
+  user.classList.remove('hide')
+  
+  const modals = document.querySelectorAll('.shopi')
+  for(let modal of modals){
+      modal.addEventListener('click', function(event) {
+        user.classList.add('hide')
+      })
+  }
+  const modalBodys = document.querySelectorAll('.js-user-icon')
+  for(let modalBody of modalBodys) {
+      modalBody.addEventListener('click', function(event) {
+        event.stopPropagation()
+      })
+  }
+}
+

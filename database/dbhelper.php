@@ -3,7 +3,7 @@ require_once('config.php');
 
 function execute($sql) {
 
-    $conn = mysqli_connect(HOST, EMAIL, PASSWORD, DATABASE);
+    $conn = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
     mysqli_set_charset($conn,'utf8');
 
     if($conn->connect_error) {
@@ -22,7 +22,7 @@ function executeResult($sql, $isSingle = false) {
     
     $data = null;
 
-    $conn = mysqli_connect(HOST, EMAIL, PASSWORD, DATABASE);
+    $conn = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
     mysqli_set_charset($conn,'utf8');
 
     if($conn->connect_error) {

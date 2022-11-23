@@ -119,7 +119,7 @@ if(!empty($_POST)) {
                 <td>'.($index++).'</td>
                 <td><img height = "100" width = "auto" src = "'.$selling['image'].'"</td>
                 <td>'.$selling['name'].'</td>
-                <td>'.$selling['price'].'</td>
+                <td>'. currency_format($selling['price'],"",",").'</td>
                 <td><button class="btn btn-warning" 
                 onclick=\'window.open("edit.php?id='.$selling['id'].'","_self")\'>
                 Edit</button></td>
