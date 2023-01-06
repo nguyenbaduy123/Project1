@@ -47,7 +47,7 @@
                 <div class="auth-form__header">
                     <h2>Đăng nhập</h2>
                 </div>
-                <form method ="post" action="login.php" id="LoginForm" onsubmit="return validateLoginForm();">
+                <form method ="post" action="login.php" id="login-form" onsubmit="return validateLoginForm();">
                     <div class="form-group">
                         <input required="true" type="email" class="form-control"
                         id="emailL"  name="email" placeholder="Nhập email">
@@ -67,3 +67,24 @@
         </div>
 
     </div>
+
+    <script type="text/javascript">
+        $("#login-form").submit(function(e){
+            e.preventDefault();
+
+            var form = $(this);
+            var actionUrl = form.attr('action');
+
+            $.ajax({
+                type: "POST",
+                url: actionUrl,
+                data: form.serialize(),
+                success: function(data) {
+                    if(data == "success") {
+                        location.reload();
+                    }
+                    else alert(data);
+                }
+            })
+        })
+    </script>

@@ -21,16 +21,29 @@ if(!empty($_GET)) {
         $sql = "SELECT * FROM products WHERE name LIKE '$search' OR description LIKE '$search'";
         $productList = executeResult($sql);
     }
+
+    if(isset($_GET['sort'])) {
+        $sort = getGet('sort');
+        switch($sort) {
+            case 'name':
+                usort($productList, function ($item1, $item2) {
+                    return stripVN($item1['name']) <=> stripVN($item2['name']);
+                });
+                break;
+            case 'price': 
+                usort($productList, function ($item1, $item2) {
+                    return $item1['price'] <=> $item2['price'];
+                });
+                break;
+            case 'date':
+                usort($productList, function ($item1, $item2) {
+                    return $item1['created_date'] <=> $item2['created_date'];
+                });
+                break;
+        }
+    }
 }
 
-$sort = getGet('sort');
-switch($sort) {
-    case 'price': 
-        usort($productList, function ($item1, $item2) {
-            return $item1['price'] <=> $item2['price'];
-        });
-        break;
-}
 ?>
 
 <div class="container">
@@ -46,19 +59,44 @@ switch($sort) {
     $categoryList = executeResult($sql);
     foreach($categoryList as $categoryItem) {
         echo '
-                <a href="?category='.$categoryItem['id'].'" class="category-item">
-                    <div class="category-item__img" style = "background-image: url('.$categoryItem['image'].')"></div>
-                    <div class="category-item__name">'.$categoryItem['name'].'</div>
-                </a>';
+            <a href="?category='.$categoryItem['id'].'" class="category-item">
+                <div class="category-item__img" style = "background-image: url('.$categoryItem['image'].')"></div>
+                <div class="category-item__name">'.$categoryItem['name'].'</div>
+            </a>';
     } 
 ?> 
             </div>
         </div>
         <div class="sort">
             <h4 style="display: inline">Sắp xếp theo:</h4>
-            <a href="?sort=name" class="btn btn-sort">Tên sản phẩm</a>
-            <a href="?sort=price" class="btn btn-sort">Giá bán</a>
-            <a href="?sort=date" class="btn btn-sort">Ngày bán</a>
+            <a href="<?php
+            if(empty($_GET)) {
+                echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?sort=name";
+            } else if(!isset($_GET['sort'])) {
+                echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."&sort=name";
+            } else if ((getGet('sort') != "") && getGet('sort') != 'name') {
+                $query = $_GET;
+                $query['sort'] = 'name';
+                $query_result = http_build_query($query);
+                echo $_SERVER['PHP_SELF'].'?'.$query_result;
+            }
+            ?>"
+            class="btn btn-sort" style="<?php
+                if(getGet('sort') == "name") 
+                    echo "background-color: #f63; color: #fff;";
+            ?>">Tên sản phẩm</a>
+            <a href="<?php
+            sortBy('price')
+            ?>" class="btn btn-sort" style="<?php
+                if(getGet('sort') == "price") 
+                    echo "background-color: #f63; color: #fff;";
+            ?>">Giá bán</a>
+            <a href="<?php
+            sortBy('date')
+            ?>" class="btn btn-sort" style="<?php
+                if(getGet('sort') == "date") 
+                    echo "background-color: #f63; color: #fff;";
+            ?>">Ngày bán</a>
         </div> 
         <div class="grid__row">
         <?php 
@@ -83,4 +121,16 @@ switch($sort) {
 
 <?php
     include_once ('layouts/footer.php');
+    function sortBy($name) {
+        if(empty($_GET)) {
+            echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."?sort=".$name;
+        } else if(!isset($_GET['sort'])) {
+            echo "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"."&sort=".$name;
+        } else if ((getGet('sort') != "") && getGet('sort') != $name) {
+            $query = $_GET;
+            $query['sort'] = $name;
+            $query_result = http_build_query($query);
+            echo $_SERVER['PHP_SELF'].'?'.$query_result;
+        }
+    }
 ?>

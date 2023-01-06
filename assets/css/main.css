@@ -72,6 +72,7 @@
 .user-info__list {
     list-style-type: none;
     padding: 0 0;
+    cursor: pointer;
 }
 
 .user-info__list-item {
@@ -116,14 +117,18 @@
 }
 
 .btn {
+    color: #fff;
     height: 48px;
     background-color: #f63;
     border: none;
     margin: 16px 16px;
     border-radius: 2px;
+    text-align: center;
+    border-radius: 4px;
 }
 .btn-success {
     width: calc(100% - 32px);
+    line-height: 2.5rem;
 }
 
 .btn:hover {
@@ -347,13 +352,13 @@ text-align: center;
     height: 2.5rem;
     min-width: 3rem;
     background-color: #f0c31f;
-    border-radius: 4px;
+    line-height: 2.5rem;
 }
 
 .btn-danger {
     height: 2.5rem;
     background-color: #e74343;
-    border-radius: 4px;
+    line-height: 2.5rem;
 }
 
 .form-checkout {

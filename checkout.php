@@ -7,6 +7,7 @@ if(isLogin() == false) {
     header("Location: index.php");
     die();
 }
+$userId = getSession('user')['id'];
 include_once ('layouts/header.php');
 $cart = [];
 if(!empty($_GET)) {
@@ -41,8 +42,8 @@ if(!empty($_POST)) {
     $order_date = date('Y-m-d H:i:s');
 
 
-    $sql = "INSERT INTO orders (full_name, phone_number, email, address, order_date)
-            values ('$full_name', '$phone_number', '$email', '$address', '$order_date')";
+    $sql = "INSERT INTO orders (full_name, phone_number, email, address, order_date, customer_id)
+            values ('$full_name', '$phone_number', '$email', '$address', '$order_date', '$userId')";
     execute($sql);
 
     $sql = "SELECT * FROM orders WHERE order_date = '$order_date'";

@@ -15,7 +15,18 @@ if(!empty($_POST)) {
             break;
         case 'delete': deleteItem($id);
             break;
+        case 'buy': buyNow($id);
     }
+}
+
+function buyNow($id) {
+    $user = getSession('user');
+    $sql = "SELECT * FROM products WHERE id = '$id'";
+        $product = executeResult($sql, true);
+        if($product['seller_id'] == $user['id']) {
+            echo "Không thể mua sản phẩm do chính mình bán";
+            return;
+        }
 }
 
 function addToCart($id) {
@@ -41,6 +52,7 @@ function addToCart($id) {
         $sql = "SELECT * FROM products WHERE id = '$id'";
         $product = executeResult($sql, true);
         if($product['seller_id'] == $user['id']) {
+            echo "Không thể mua sản phẩm do chính mình bán";
             return;
         }
         $product['num'] = 1;

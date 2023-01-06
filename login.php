@@ -27,16 +27,11 @@ if($data != null && count($data) > 0) {
     setcookie('token', $token, time()+24*60*60, '/');
     $sql = "UPDATE users SET token = '$token' WHERE id = ".$data[0]['id'];
     execute($sql);
-    if (isset($_SERVER["HTTP_REFERER"])) {
-        header("Location: " . $_SERVER["HTTP_REFERER"]);
-    }
+    echo "success";
     die();
 }
 else {
-    echo "<script>
-    window.location.href = 'index.php';
-    alert('Tài khoản hoặc mật khẩu không chính xác');
-    </script>";
+    echo "Tài khoản hoặc mật khẩu không chính xác;";
 }
 
 ?>

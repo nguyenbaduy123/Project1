@@ -4,6 +4,7 @@ $title = "Chi tiết sản phẩm";
 require_once ("./utils/utility.php");
 require_once ("./database/dbhelper.php");
 include_once ('layouts/header.php');
+$user = getCookie('user');
 $seller = "";
 $productId = "";
 if(!empty($_GET)) {
@@ -25,7 +26,7 @@ if(!empty($_GET)) {
                         <span class="this-product__name"><?=$thisProduct['name'] ?></span>
                         <div class="this-product__price"><?= currency_format($thisProduct['price']) ?></div>
                         <div class="btn add-btn" onclick="addToCart(<?=$productId?>)" style="background-color: green;">Thêm vào giỏ hàng</div>
-                        <div class="btn buy-btn" onclick= "window.location.href='checkout.php?buy=<?=$productId?>'">Mua ngay</div>
+                        <div class="btn buy-btn" onclick= "buyNow(<?=$productId?>)">Mua ngay</div>
                         <div class="this-product__seller">
                             <span>
                                 Người bán:
@@ -41,7 +42,7 @@ if(!empty($_GET)) {
                         </div>
                     </div>
                 </div>
-                <div class="this-product_des" style="word-wrap: break-word;">
+                <div class="this-product_des" id="result" style="word-wrap: break-word;">
                     <div class="this-product_des-header">Mô tả sản phẩm</div>
                     <div class="this-product_des-body">
                         <pre>
@@ -72,10 +73,28 @@ if(!empty($_GET)) {
                 'action': 'add',
                 'id': id
             }, function(data) {
-                location.reload();
+                if(data != "" && data != null) {
+                    alert(data);
+                } 
+                else {
+                    location.reload();
+                }
             })
         }
 
+    }
+    function buyNow(id) {
+        $.post("api/api-sanpham.php", {
+            'action': 'buy',
+            'id':id
+        },function(data) {
+            if(data != "" && data != null) {
+                alert(data);
+            } 
+            else {
+                location.href="checkout.php?buy="+id
+            }
+        })
     }
 </script>
 

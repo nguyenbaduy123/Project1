@@ -8,7 +8,7 @@ if(isLogin() == false) {
     die();
 }
 include_once ('layouts/header.php');
-$userId = $_SESSION['user']['id'];
+$userId = getSession('user')['id'];
 if(!empty($_POST)) {
 
     $productImg = "";
@@ -21,7 +21,7 @@ if(!empty($_POST)) {
         $exploded = explode('.', $_FILES['image']['name']);
         $last_element = end($exploded);
         $file_ext = strtolower($last_element);
-        $expensions= array("jpeg","jpg","png");
+        $expensions= array("jpg","png");
            
         if(in_array($file_ext,$expensions)=== false){
            $errors[]="Chỉ hỗ trợ upload file JPG hoặc PNG.";

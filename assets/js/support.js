@@ -4,8 +4,10 @@ function validateSignUpForm() {
     let cpwd = document.getElementById('confirmation_passwordS').value
     if(pwd != cpwd) { 
         alert("Mật khẩu xác nhận không trùng khớp")
+        // $('#SignUpForm').append("Mật khẩu xác nhận không trùng khớp")
+        
         $("#SignUpForm").on("submit", function (e) {
-        e.preventDefault();
+          e.preventDefault();
         });
         document.getElementById('passwordS').value = '';
         document.getElementById('confirmation_passwordS').value = '';
