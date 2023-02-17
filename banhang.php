@@ -1,19 +1,18 @@
 <?php
 session_start();
-$title = "Bán hàng";
-require_once ("./utils/utility.php");
-require_once ("./database/dbhelper.php");
-if(isLogin() == false) {
-    header("Location: index.php");
+$title = 'Bán hàng';
+require_once './utils/utility.php';
+require_once './database/dbhelper.php';
+if (isLogin() == false) {
+    header('Location: index.php');
     die();
 }
-include_once ('layouts/header.php');
+include_once 'layouts/header.php';
 $userId = getSession('user')['id'];
-if(!empty($_POST)) {
-
-    $productImg = "";
-    if(isset($_FILES['image'])){
-        $errors= array();
+if (!empty($_POST)) {
+    $productImg = '';
+    if (isset($_FILES['image'])) {
+        $errors = [];
         $file_name = $_FILES['image']['name'];
         $file_size = $_FILES['image']['size'];
         $file_tmp = $_FILES['image']['tmp_name'];
@@ -21,38 +20,39 @@ if(!empty($_POST)) {
         $exploded = explode('.', $_FILES['image']['name']);
         $last_element = end($exploded);
         $file_ext = strtolower($last_element);
-        $expensions= array("jpg","png");
-           
-        if(in_array($file_ext,$expensions)=== false){
-           $errors[]="Chỉ hỗ trợ upload file JPG hoặc PNG.";
+        $expensions = ['jpg', 'png'];
+
+        if (in_array($file_ext, $expensions) === false) {
+            $errors[] = 'Chỉ hỗ trợ upload file JPG hoặc PNG.';
         }
-        if($file_size > 2097152) {
-            $errors[]='Kích thước file không được lớn hơn 2MB';
+        if ($file_size > 2097152) {
+            $errors[] = 'Kích thước file không được lớn hơn 2MB';
         }
-        if(empty($errors)==true) {
-            $randomName = substr(getPwdSecurity(time().$file_name), 0, 8).".".$file_ext;
-            move_uploaded_file($file_tmp,"images/".$randomName);
-            $productImg = "./images/".$randomName;
-            $date = date("Y/m/d");
+        if (empty($errors) == true) {
+            $randomName =
+                substr(getPwdSecurity(time() . $file_name), 0, 8) .
+                '.' .
+                $file_ext;
+            move_uploaded_file($file_tmp, 'images/' . $randomName);
+            $productImg = './images/' . $randomName;
+            $date = date('Y/m/d');
             $productName = getPost('name');
             $productCategory = getPost('category');
             $productDes = getPost('description');
             $productPrice = getPost('price');
-           
-            $productPrice = str_ireplace( array(','), '', $productPrice);
-            $productPrice = (int)$productPrice;
-           
-            if($productName != null && $productPrice != null){
-           
-               $sql = "INSERT INTO products(name, price, description, image, created_date, seller_id, category_id)
-                   VALUE ('$productName','$productPrice','$productDes','$productImg','$date','$userId','$productCategory')";
-               execute($sql);
-           }
-        }else{
-           echo "<script>alert('$errors[0]')</script>";
-        }
-     }
 
+            $productPrice = str_ireplace([','], '', $productPrice);
+            $productPrice = (int) $productPrice;
+
+            if ($productName != null && $productPrice != null) {
+                $sql = "INSERT INTO products(name, price, description, image, created_date, seller_id, category_id)
+                   VALUE ('$productName','$productPrice','$productDes','$productImg','$date','$userId','$productCategory')";
+                execute($sql);
+            }
+        } else {
+            echo "<script>alert('$errors[0]')</script>";
+        }
+    }
 }
 ?>
         <div class="container">
@@ -71,14 +71,18 @@ if(!empty($_POST)) {
                                 <h4 class="input-name">Danh mục:</h4>
                                 <select name="category">
                                       <option value="">---Lựa chọn danh mục---</option>
-                                <?php 
-                                    $sql = "SELECT * FROM category";
-                                    $categoryList = executeResult($sql);
-                                    foreach($categoryList as $categoryItem) {
-                                        echo '
-                                            <option value="'.$categoryItem['id'].'">'.$categoryItem['name'].'</option>
+                                <?php
+                                $sql = 'SELECT * FROM category';
+                                $categoryList = executeResult($sql);
+                                foreach ($categoryList as $categoryItem) {
+                                    echo '
+                                            <option value="' .
+                                        $categoryItem['id'] .
+                                        '">' .
+                                        $categoryItem['name'] .
+                                        '</option>
                                         ';
-                                    }
+                                }
                                 ?>
 
                                 </select>
@@ -98,7 +102,7 @@ if(!empty($_POST)) {
                 <div class="selling">
                     <div class="selling-header">Sản phẩm đang bán</div>
                     <div class="selling-body">
-                        <table class="table table-bordered" style="width: 1200px;">
+                        <table class="table table-bordered" style="max-width: 1200px;">
                             <thead>
                                 <tr>
                                     <th>STT</th>
@@ -110,24 +114,36 @@ if(!empty($_POST)) {
                                 </tr>
                             </thead>
                             <tbody>
-<?php                               
-    $sql = "SELECT * FROM products WHERE seller_id = '$userId'";
-    $sellingList = executeResult($sql);
-    $index = 1;
-    foreach($sellingList as $selling) {
-        echo '<tr>
-                <td>'.($index++).'</td>
-                <td><img height = "100" width = "auto" src = "'.$selling['image'].'"</td>
-                <td>'.$selling['name'].'</td>
-                <td>'. currency_format($selling['price'],"",",").'</td>
+<?php
+$sql = "SELECT * FROM products WHERE seller_id = '$userId'";
+$sellingList = executeResult($sql);
+$index = 1;
+foreach ($sellingList as $selling) {
+    echo '<tr>
+                <td>' .
+        $index++ .
+        '</td>
+                <td><img height = "100" width = "auto" src = "' .
+        $selling['image'] .
+        '"</td>
+                <td>' .
+        $selling['name'] .
+        '</td>
+                <td>' .
+        currency_format($selling['price'], '', ',') .
+        '</td>
                 <td><button class="btn btn-warning" 
-                onclick=\'window.open("edit.php?id='.$selling['id'].'","_self")\'>
+                onclick=\'window.open("edit.php?id=' .
+        $selling['id'] .
+        '","_self")\'>
                 Edit</button></td>
                 <td><button class="btn btn-danger" 
-                onclick="deleteProduct('.$selling['id'].')">
+                onclick="deleteProduct(' .
+        $selling['id'] .
+        ')">
                 Delete</button></td>
             </tr>';
-    }
+}
 ?>                        
                             </tbody>
                         </table>
@@ -137,9 +153,7 @@ if(!empty($_POST)) {
         </div>
 
     </div>
-<?php 
-    include_once('layouts/footer.php');
-?>
+<?php include_once 'layouts/footer.php'; ?>
 
 <script type="text/javascript">
         $("input[data-type='currency']").on({

@@ -1,13 +1,13 @@
 <?php
 session_start();
-$title = "Giỏ hàng";
-require_once ("./utils/utility.php");
-require_once ("./database/dbhelper.php");
-if(isLogin() == false) {
-    header("Location: index.php");
+$title = 'Giỏ hàng';
+require_once './utils/utility.php';
+require_once './database/dbhelper.php';
+if (isLogin() == false) {
+    header('Location: index.php');
     die();
 }
-include_once ('layouts/header.php');
+include_once 'layouts/header.php';
 ?>
 
 <div class="container">
@@ -29,26 +29,39 @@ include_once ('layouts/header.php');
                             <tbody>
 <?php
 $cart = [];
-if(isset($_SESSION['cart'])) {
+if (isset($_SESSION['cart'])) {
     $cart = $_SESSION['cart'];
 }
 $count = 1;
 $total = 0;
-if(count($cart) < 1) {
+if (count($cart) < 1) {
     echo '<h1>Bạn chưa lựa chọn sản phẩm nào</h1>';
-}
-else {
-    foreach($cart as $item) {
+} else {
+    foreach ($cart as $item) {
         $total += $item['num'] * $item['price'];
         echo '
         <tr>
-        <td>'.$count++.'</td>
-        <td><img height = "100" width = "auto" src = "'.$item['image'].'"</td>
-        <td>'.$item['name'].'</td>
-        <td>'.currency_format($item['price']).'</td>
-        <td>'.$item['num'].'</td>
-        <td>'.currency_format($item['num']*$item['price']).'</td>
-        <td><button class="btn btn-danger" onclick="deleteItem('.$item['id'].')">
+        <td>' .
+            $count++ .
+            '</td>
+        <td><img height = "100" width = "auto" src = "' .
+            $item['image'] .
+            '"</td>
+        <td>' .
+            $item['name'] .
+            '</td>
+        <td>' .
+            currency_format($item['price']) .
+            '</td>
+        <td>' .
+            $item['num'] .
+            '</td>
+        <td>' .
+            currency_format($item['num'] * $item['price']) .
+            '</td>
+        <td><button class="btn btn-danger" onclick="deleteItem(' .
+            $item['id'] .
+            ')">
                     Delete</button></td>
     </tr>';
     }
@@ -56,8 +69,10 @@ else {
 ?>    
                             </tbody>
                         </table>
-                        <h2 style="color: red;">Tổng: <?=currency_format($total)?></h2>
-                        <?php if(count($cart) > 0) {
+                        <h2 style="color: red;">Tổng: <?= currency_format(
+                            $total
+                        ) ?></h2>
+                        <?php if (count($cart) > 0) {
                             echo '<a href="checkout.php" style="text-decoration: none">
                             <div class="btn add-btn" style="background-color: green; margin: auto 0;">Đặt hàng</div></a>';
                         } ?>
@@ -78,7 +93,5 @@ else {
 </script>
 
 
-<?php 
-    include_once('layouts/footer.php');
-?>
+<?php include_once 'layouts/footer.php'; ?>
 

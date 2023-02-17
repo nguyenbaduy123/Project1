@@ -1,13 +1,13 @@
 <?php
-$title = "Thông báo";
-require_once('./database/dbhelper.php');
-require_once('./utils/utility.php');
-if(!isLogin()) {
-    header("Location: index.php");
+$title = 'Thông báo';
+require_once './database/dbhelper.php';
+require_once './utils/utility.php';
+if (!isLogin()) {
+    header('Location: index.php');
     die();
 }
 
-include_once('./layouts/header.php');
+include_once './layouts/header.php';
 
 $user = getSession('user');
 $user_id = $user['id'];
@@ -29,8 +29,8 @@ $sql = "SELECT od.id, od.product_id, p.name as product_name, od.price,
     WHERE o.customer_id = '$user_id'
 ";
 $buy_notifications = executeResult($sql);
-// var_dump($notification);
 
+// var_dump($notification);
 ?>
 
 <div class="container">
@@ -39,24 +39,26 @@ $buy_notifications = executeResult($sql);
        <h3 class="sell-notification-header" style="text-align: center; 
         margin: 0; color: white;
        height: 2.5rem; line-height: 2.5rem">Đơn hàng đang chờ</h3>
-<?php   
-    foreach($sell_notifications as $notification) {
-        echo '<div class="notification-item" id="id'.$notification['id'].'">';
-        echo "
+<?php foreach ($sell_notifications as $notification) {
+    echo '<div class="notification-item" id="id' . $notification['id'] . '">';
+    echo "
             Người dùng <a href=''>$notification[customer_name]</a> muốn mua $notification[num] 
             sản phẩm <a href=''>$notification[product_name]</a> của bạn, Đồng ý bán?</br>
         ";
-        echo '<button class="btn btn-success btn-access-sell" style="height: 2.5rem; 
+    echo '<button class="btn btn-success btn-access-sell" style="height: 2.5rem; 
         display: inline-block; background-color: green; width: 25%; margin-left: 0;"
-        onclick="acceptSell('.$notification["id"].')">
+        onclick="acceptSell(' .
+        $notification['id'] .
+        ')">
         Đồng ý
         </button> 
         <button class="btn btn-danger" style="display: inline-block; width: 25%;"
-        onclick="refuseSell('.$notification["id"].')">
+        onclick="refuseSell(' .
+        $notification['id'] .
+        ')">
         Từ chối
         </button></div>';
-    }
-?>      </div> 
+} ?>      </div> 
     <div class="sell-notification buy-notification">
        <h3 class="sell-notification-header" style="text-align: center; 
         margin: 0; color: white; background-color: var(--primary-color);
@@ -74,33 +76,39 @@ $buy_notifications = executeResult($sql);
                                 </tr>
                             </thead>
                             <tbody>
-<?php 
-    $stt = 1;
-    foreach($buy_notifications as $bNotification) {
-        echo '
+<?php
+$stt = 1;
+foreach ($buy_notifications as $bNotification) {
+    echo '
             <tr>
-            <td>'.$stt.'</td>
-            <td><img height="100" width="auto" src="'.$bNotification["image"].'"</td>
-            <td>'.$bNotification["product_name"].'</td>
-            <td>'.$bNotification['num'].'</td>
-            <td>'.
-            currency_format($bNotification['price']*$bNotification['num'])
-            .'</td>
+            <td>' .
+        $stt .
+        '</td>
+            <td><img height="100" width="auto" src="' .
+        $bNotification['image'] .
+        '"</td>
+            <td>' .
+        $bNotification['product_name'] .
+        '</td>
+            <td>' .
+        $bNotification['num'] .
+        '</td>
+            <td>' .
+        currency_format($bNotification['price'] * $bNotification['num']) .
+        '</td>
         ';
-        if($bNotification['status'] == null) {
-            echo '<td>Đang chờ</td>';
-        }
-        else if ($bNotification['status'] == "accept") {
-            echo '<td>Đang vận chuyển</td>';
-        }
-        else if ($bNotification['status'] == "refuse") {
-            echo '<td>Bị từ chối</td>';
-        }
-
-        echo'
-            <td><button class="btn btn-danger">Hủy đơn hàng</button></td>';
-        $stt++;
+    if ($bNotification['status'] == null) {
+        echo '<td>Đang chờ</td>';
+    } elseif ($bNotification['status'] == 'accept') {
+        echo '<td>Đang vận chuyển</td>';
+    } elseif ($bNotification['status'] == 'refuse') {
+        echo '<td>Bị từ chối</td>';
     }
+
+    echo '
+            <td><button class="btn btn-danger">Hủy đơn hàng</button></td>';
+    $stt++;
+}
 ?>
                             </tbody>
        </table>
@@ -146,9 +154,7 @@ $buy_notifications = executeResult($sql);
 </script>
 
 
-<?php
-include_once('./layouts/footer.php');
-?>
+<?php include_once './layouts/footer.php'; ?>
 
 <style>
     .notification-item {

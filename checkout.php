@@ -1,21 +1,21 @@
 <?php
 session_start();
-$title = "Đặt hàng";
-require_once ("./utils/utility.php");
-require_once ("./database/dbhelper.php");
-if(isLogin() == false) {
-    header("Location: index.php");
+$title = 'Đặt hàng';
+require_once './utils/utility.php';
+require_once './database/dbhelper.php';
+if (isLogin() == false) {
+    header('Location: index.php');
     die();
 }
 $userId = getSession('user')['id'];
-include_once ('layouts/header.php');
+include_once 'layouts/header.php';
 $cart = [];
-if(!empty($_GET)) {
+if (!empty($_GET)) {
     $cart = [];
     $buy = getGet('buy');
     $sql = "SELECT * FROM products WHERE id = '$buy'";
     $product = executeResult($sql, true);
-    if($product == null || count($product) == 0) {
+    if ($product == null || count($product) == 0) {
         echo "<script>
         window.location.href = 'index.php';
         alert('Sản phẩm không tồn tại!');
@@ -24,23 +24,21 @@ if(!empty($_GET)) {
     }
     $product['num'] = 1;
     $cart[] = $product;
-}
-else {
-    if(isset($_SESSION['cart'])) {
+} else {
+    if (isset($_SESSION['cart'])) {
         $cart = $_SESSION['cart'];
     }
-    if($cart == null || count($cart) == 0) {
+    if ($cart == null || count($cart) == 0) {
         header('Location: index.php');
         die();
     }
 }
-if(!empty($_POST)) {
+if (!empty($_POST)) {
     $full_name = getPost('full_name');
     $phone_number = getPost('phone_number');
     $email = getPost('email');
     $address = getPost('address');
     $order_date = date('Y-m-d H:i:s');
-
 
     $sql = "INSERT INTO orders (full_name, phone_number, email, address, order_date, customer_id)
             values ('$full_name', '$phone_number', '$email', '$address', '$order_date', '$userId')";
@@ -50,7 +48,7 @@ if(!empty($_POST)) {
     $order = executeResult($sql, true);
     $order_id = $order['id'];
 
-    foreach($cart as $item) {
+    foreach ($cart as $item) {
         $product_id = $item['id'];
         $num = $item['num'];
         $price = $item['price'];
@@ -70,7 +68,7 @@ if(!empty($_POST)) {
 <div class="container">
     <div class="grid">
         <div class="grid__row">
-        <div class="checkout-form" style="width: 30%;">
+        <div class="checkout-form">
                     <form action = "" method = "POST">
                                 <h4 class="input-name">Họ và tên:</h4>
                                 <input required="true" type="text" name="full_name" class="form-checkout" placeholder="Không quá 150 ký tự">
@@ -81,12 +79,12 @@ if(!empty($_POST)) {
                                 <h4 class="input-name">Địa chỉ:</h4>
                                 <input required="true" type="text" name="address" class="form-checkout" placeholder="">
                         <div>
-                            <button type="submit" class="btn add-btn" style="margin-left: 0; 
-                            background-color: var(--primary-color); width: 300px; margin: 1.5rem 0; ">Hoàn thành</button>
+                            <button type="submit" class="btn add-btn hoanthanh-btn" style="margin-left: 0; 
+                            background-color: var(--primary-color); min-width: 300px; margin: 1.5rem 0; ">Hoàn thành</button>
                         </div>
                     </form>
         </div>
-            <div class="cart" style="width: 70%;">
+            <div class="cart">
             <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -108,27 +106,40 @@ if(!empty($_POST)) {
 // }
 $count = 1;
 $total = 0;
-if(count($cart) < 1) {
+if (count($cart) < 1) {
     echo '<h1>Bạn chưa lựa chọn sản phẩm nào</h1>';
-}
-else {
-    foreach($cart as $item) {
+} else {
+    foreach ($cart as $item) {
         $total += $item['num'] * $item['price'];
         echo '
         <tr>
-        <td>'.$count++.'</td>
-        <td><img height = "100" width = "auto" src = "'.$item['image'].'"</td>
-        <td>'.$item['name'].'</td>
-        <td>'.currency_format($item['price']).'</td>
-        <td>'.$item['num'].'</td>
-        <td>'.currency_format($item['num']*$item['price']).'</td>
+        <td>' .
+            $count++ .
+            '</td>
+        <td><img height = "100" width = "auto" src = "' .
+            $item['image'] .
+            '"</td>
+        <td>' .
+            $item['name'] .
+            '</td>
+        <td>' .
+            currency_format($item['price']) .
+            '</td>
+        <td>' .
+            $item['num'] .
+            '</td>
+        <td>' .
+            currency_format($item['num'] * $item['price']) .
+            '</td>
     </tr>';
     }
 }
 ?>    
                             </tbody>
                         </table>
-                        <h2 style="color: red;">Tổng: <?=currency_format($total)?></h2>
+                        <h2 style="color: red;">Tổng: <?= currency_format(
+                            $total
+                        ) ?></h2>
             </div>
     </div>
 </div>
@@ -144,7 +155,5 @@ else {
     }
 </script>
 
-<?php 
-    include_once('layouts/footer.php');
-?>
+<?php include_once 'layouts/footer.php'; ?>
 

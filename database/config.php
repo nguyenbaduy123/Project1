@@ -4,4 +4,4 @@ define('DATABASE', 'webbanhang');
 define('USER', 'root');
 define('PASSWORD', '');
 
-define('MD5_PRIVATE_KEY','1sadfDASwaSSA$%wwSS6455@ADTGJJr');
+define('MD5_PRIVATE_KEY', '1sadfDASwaSSA$%wwSS6455@ADTGJJr');

@@ -1,12 +1,12 @@
 <?php
-require_once('config.php');
+require_once 'config.php';
 
-function execute($sql) {
-
+function execute($sql)
+{
     $conn = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
-    mysqli_set_charset($conn,'utf8');
+    mysqli_set_charset($conn, 'utf8');
 
-    if($conn->connect_error) {
+    if ($conn->connect_error) {
         var_dump($conn->connect_error);
         die();
     }
@@ -18,25 +18,25 @@ function execute($sql) {
 }
 
 //SQL select
-function executeResult($sql, $isSingle = false) {
-    
+function executeResult($sql, $isSingle = false)
+{
     $data = null;
 
     $conn = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
-    mysqli_set_charset($conn,'utf8');
+    mysqli_set_charset($conn, 'utf8');
 
-    if($conn->connect_error) {
+    if ($conn->connect_error) {
         var_dump($conn->connect_error);
         die();
     }
     //query
     $resultset = mysqli_query($conn, $sql);
-    
-    if($isSingle == true) {
+
+    if ($isSingle == true) {
         $data = mysqli_fetch_array($resultset, 1);
-    } else{
+    } else {
         $data = [];
-        while(($row = mysqli_fetch_array($resultset, 1)) != null) {
+        while (($row = mysqli_fetch_array($resultset, 1)) != null) {
             $data[] = $row;
         }
     }
