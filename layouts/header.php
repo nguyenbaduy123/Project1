@@ -16,7 +16,7 @@ $num = count($cart);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <script src="./assets/js/support.js"></script>
+    <script src="./assets/js/script.js"></script>
     <link rel="stylesheet" href="./assets/fonts/fontawesome-free-6.2.0-web/css/all.min.css">
     <link rel="stylesheet" href="./assets/css/base.css">
     <link rel="stylesheet" href="./assets/css/main.css">
@@ -104,7 +104,7 @@ $num = count($cart);
                         </list>
 
                         <list class="navbar-item">
-                            <div class="navbar-item-link navbar-item--strong navbar--need
+                            <div class="navbar-item-link navbar-item--strong navbar--need" style="
                             <?php if (isLogin() == true) {
                                 echo 'display: inline;';
                             } else {
@@ -117,7 +117,7 @@ $num = count($cart);
                 </nav>
                 <div class="header-width-search">
                     <a href="index.php" class="header__logo">
-                       <img src="assets/img/troll-face.png" alt="" style="max-width: 50px; max-height: 50px;">
+                       <img src="assets/img/troll-face.png" alt="" class="header--logo__image">
                     </a>
 
                     <div class="header__search">

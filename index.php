@@ -8,7 +8,9 @@ include_once 'layouts/header.php';
 
 $productList = [];
 $search = '';
-$sql = 'SELECT * FROM products';
+$sql = '';
+$from = 0;
+$sql = 'SELECT * FROM products LIMIT 12';
 $productList = executeResult($sql);
 if (!empty($_GET)) {
     if (isset($_GET['category'])) {
@@ -103,7 +105,7 @@ foreach ($categoryList as $categoryItem) {
     echo 'background-color: #359eff; color: #fff;';
 } ?>">Ngày bán</a>
         </div> 
-        <div class="grid__row">
+        <div class="grid__row" id="product">
         <?php
         if (count($productList) == 0) {
             echo '<h4 style = " width: 100%; text-align: center;">Không tìm thấy kết quả phù hợp</h4>';
@@ -126,6 +128,15 @@ foreach ($categoryList as $categoryItem) {
                 </div>';
         }
         ?>
+                </div>
+                <div class="page-list">
+                    <?php for (
+                        $i = 1;
+                        $i <= sizeof($productList) / 12 + 1;
+                        $i++
+                    ) {
+                        echo "<div class=page-num id=page$i onclick='goToPage($i)'>$i</div>";
+                    } ?>
                 </div>
             </div>
             </div>
@@ -151,6 +162,15 @@ function sortBy($name)
         echo $_SERVER['PHP_SELF'] . '?' . $query_result;
     }
 }
-
-
 ?>
+
+<script>
+    function goToPage(i) {
+        $('.page-list .page-num').css("opacity", "1");
+        $.get("./api/api-phantrang.php?page="+i,(data) => {
+            $('#product').empty();
+            $('#product').append(data);
+            $('#page'+i).css("opacity", "0.5")
+        });
+    }
+</script>

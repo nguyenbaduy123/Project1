@@ -13,7 +13,7 @@ $user = getSession('user');
 $user_id = $user['id'];
 
 $sql = "SELECT od.id, o.full_name as customer_name, o.phone_number, o.address, o.email,
-        p.name as product_name, od.num
+        p.name as product_name, od.num, p.id as product_id
  FROM order_details AS od
     INNER JOIN products as p ON p.id = od.product_id
     INNER JOIN orders as o ON o.id = od.order_id
@@ -30,7 +30,7 @@ $sql = "SELECT od.id, od.product_id, p.name as product_name, od.price,
 ";
 $buy_notifications = executeResult($sql);
 
-// var_dump($notification);
+$totalNotif = sizeof($sell_notifications) + sizeof($buy_notifications);
 ?>
 
 <div class="container">
@@ -40,10 +40,11 @@ $buy_notifications = executeResult($sql);
         margin: 0; color: white;
        height: 2.5rem; line-height: 2.5rem">Đơn hàng đang chờ</h3>
 <?php foreach ($sell_notifications as $notification) {
+    $product_id = $notification['product_id'];
     echo '<div class="notification-item" id="id' . $notification['id'] . '">';
     echo "
             Người dùng <a href=''>$notification[customer_name]</a> muốn mua $notification[num] 
-            sản phẩm <a href=''>$notification[product_name]</a> của bạn, Đồng ý bán?</br>
+            sản phẩm <a href='sanpham.php?id=$product_id'>$notification[product_name]</a> của bạn, Đồng ý bán?</br>
         ";
     echo '<button class="btn btn-success btn-access-sell" style="height: 2.5rem; 
         display: inline-block; background-color: green; width: 25%; margin-left: 0;"
